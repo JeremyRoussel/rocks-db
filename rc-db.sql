@@ -1,8 +1,8 @@
 CREATE TABLE "users" (
   "id" SERIAL UNIQUE PRIMARY KEY,
   "full_name" varchar(100),
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" timestamp DEFAULT (now()),
+  "updated_at" timestamp DEFAULT (now())
 );
 
 CREATE TABLE "catalogue" (
@@ -12,16 +12,16 @@ CREATE TABLE "catalogue" (
   "user" int NOT NULL,
   "field" varchar(100),
   "well" varchar(100),
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" timestamp DEFAULT (now()),
+  "updated_at" timestamp DEFAULT (now())
 );
 
 CREATE TABLE "triax" (
   "id" SERIAL UNIQUE PRIMARY KEY,
   "sampleID" int NOT NULL,
   "file_loc" varchar NOT NULL,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" timestamp DEFAULT (now()),
+  "updated_at" timestamp DEFAULT (now())
 );
 
 CREATE TABLE "petro_props" (
@@ -31,16 +31,16 @@ CREATE TABLE "petro_props" (
   "k" int,
   "length" int,
   "diameter" int,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" timestamp DEFAULT (now()),
+  "updated_at" timestamp DEFAULT (now())
 );
 
 CREATE TABLE "thin_section" (
   "id" SERIAL UNIQUE PRIMARY KEY,
   "sampleID" int NOT NULL,
   "file_loc" varchar NOT NULL,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" timestamp DEFAULT (now()),
+  "updated_at" timestamp DEFAULT (now())
 );
 
 ALTER TABLE "catalogue" ADD FOREIGN KEY ("user") REFERENCES "users" ("id");
