@@ -26,7 +26,7 @@ var db = require('knex')({
       host : '127.0.0.1',
       user : 'postgres',
       password : 'postgres',
-      database : 'contactsapp'
+      database : 'rock-catalogue'
     }
 });
 
@@ -55,10 +55,8 @@ app.use(morgan('combined')) // use 'tiny' or 'combined'
 
 // App Routes - Auth
 app.get('/', (req, res) => res.send('hello world'))
-app.get('/crud', (req, res) => main.getTableData(req, res, db))
-app.post('/crud', (req, res) => main.postTableData(req, res, db))
-app.put('/crud', (req, res) => main.putTableData(req, res, db))
-app.delete('/crud', (req, res) => main.deleteTableData(req, res, db))
+app.get('/catalogue', (req, res) => main.getTableData(req, res, db))
+
 
 // App Server Connection
 app.listen(process.env.PORT || 3001, () => {
