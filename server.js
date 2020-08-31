@@ -52,6 +52,7 @@ app.use(helmet())  // modifies headers to prevent attacks
 // app.use(cors(corsOptions))  // access control by requesting page
 app.use(bodyParser.json())
 app.use(morgan('combined')) // use 'tiny' or 'combined'
+app.use(express.static('uploads'))
 
 // App Routes - Auth
 app.get('/', (req, res) => res.send('hello world'))

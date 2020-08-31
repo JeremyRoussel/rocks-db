@@ -10,7 +10,7 @@ const getTableData = (req, res, db) => {
       })
       .catch(err => res.status(400).json({dbError: 'db error'}))
 }
-  
+
 //  const postTableData = (req, res, db) => {
 //     const { first, last, email, phone, location, hobby } = req.body
 //     console.log(req.body)
@@ -43,5 +43,5 @@ const getTableData = (req, res, db) => {
 // }
   
 module.exports = {
-    getTableData,
+    getTableData
   }
