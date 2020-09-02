@@ -11,6 +11,26 @@ const getTableData = (req, res, db) => {
       .catch(err => res.status(400).json({dbError: 'db error'}))
 }
 
+const addSampleData = (req, res, db) => {
+  const { id, name, project, user, field, well, thumbnail} = req.body
+  console.log(req.body)
+  db('catalogue').insert({name, project, user, field, well, thumbnail})
+  .returning('*')
+  .then(item => res.json(item))
+  .catch(err => res.status(400).json({dbError: 'db error'}))
+}
+
+const putSampleData = (req, res, db) => {
+  const {id, name, project, user, field, well, thumbnail} = req.body
+  console.log(req.body)
+  db('catalogue').where({id}).update({name, project, user, field, well, thumbnail})
+  .returning('*')
+  .then(item => {
+    res.json(item)
+  })
+  .catch(err => res.status(400).json({dbError: 'db error'}))
+}
+
 //  const postTableData = (req, res, db) => {
 //     const { first, last, email, phone, location, hobby } = req.body
 //     console.log(req.body)
@@ -43,5 +63,7 @@ const getTableData = (req, res, db) => {
 // }
   
 module.exports = {
-    getTableData
+    getTableData,
+    addSampleData,
+    putSampleData
   }
