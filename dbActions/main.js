@@ -31,39 +31,24 @@ const putSampleData = (req, res, db) => {
   .catch(err => res.status(400).json({dbError: 'db error'}))
 }
 
-//  const postTableData = (req, res, db) => {
-//     const { first, last, email, phone, location, hobby } = req.body
-//     console.log(req.body)
-//     const added = new Date()
-//     db('contacts').insert({first, last, email, phone, location, hobby, added})
-//       .returning('*')
-//       .then(item => {
-//         res.json(item)
-//       })
-//       .catch(err => res.status(400).json({dbError: 'db error'}))
-// }
-  
-// const putTableData = (req, res, db) => {
-//     const { id, first, last, email, phone, location, hobby } = req.body
-//     db('contacts').where({id}).update({first, last, email, phone, location, hobby})
-//       .returning('*')
-//       .then(item => {
-//         res.json(item)
-//       })
-//       .catch(err => res.status(400).json({dbError: 'db error'}))
-// }
-  
-// const deleteTableData = (req, res, db) => {
-//     const { id } = req.body
-//     db('contacts').where({id}).del()
-//       .then(() => {
-//         res.json({delete: 'true'})
-//       })
-//       .catch(err => res.status(400).json({dbError: 'db error'}))
-// }
+// getSampleImages intakes the url parameter for id sent to the server
+// int must be an integer!!
+const getSampleImages = (req, res, db, id) => {
+  db('thin_section').where({'sampleID': id}).select('*')
+  .then(items => {
+    console.log(items)
+    if(items.length){
+      res.json(items)
+    } else {
+      res.json({dataExists: 'false'})
+    }
+  })
+  .catch(err => res.status(400).json({dbError: 'db error'}))
+}
   
 module.exports = {
     getTableData,
     addSampleData,
-    putSampleData
+    putSampleData,
+    getSampleImages
   }

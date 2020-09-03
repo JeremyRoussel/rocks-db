@@ -7,16 +7,7 @@ const helmet = require('helmet') // creates headers that protect from attacks (s
 const bodyParser = require('body-parser') // turns response into usable format
 const cors = require('cors')  // allows/disallows cross-site communication
 const morgan = require('morgan') // logs requests
-
-
-// db Connection w/ Heroku
-// const db = require('knex')({
-//   client: 'pg',
-//   connection: {
-//     connectionString: process.env.DATABASE_URL,
-//     ssl: true,
-//   }
-// });
+var multer = require('multer')
 
 
 // Import DB with knex and pg
@@ -29,6 +20,19 @@ var db = require('knex')({
       database : 'rock-catalogue'
     }
 });
+
+// Multer Storage Function
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+  cb(null, 'uploads/thin-sections')
+},
+filename: function (req, file, cb) {
+  cb(null, file.originalname )
+}
+})
+
+// Multer Instance
+var upload = multer({ storage: storage })
 
 
 // Import DB Actions
@@ -60,6 +64,39 @@ app.get('/catalogue', (req, res) => main.getTableData(req, res, db))
 app.post('/catalogue', (req, res) => main.addSampleData(req, res, db))
 app.put('/catalogue', (req, res) => main.putSampleData(req, res, db))
 
+app.get('/images/:id', (req, res) => {
+  main.getSampleImages(req, res, db, req.params.id)
+})
+
+// Multer File Route
+app.post('/upload', upload.single('image'), async (req, res, next) => {
+  const file = req.file
+  // console.log(`sampleID`, req.body.sampleID)
+  if (!req.body.sampleID) {
+    const error = new Error('Include the sampleID in uploads')
+    error.httpStatusCode = 400
+    return next(error)
+  }
+  if (!file) {
+    const error = new Error('Please upload a file')
+    error.httpStatusCode = 400
+    return next(error)
+  }
+  let sampleID = req.body.sampleID
+  let file_loc = 'http://localhost:3001/thin-sections/' + file.originalname
+  
+  const dbEntry = await db('thin_section').insert({sampleID, file_loc})
+    .returning('*')
+    .then(item => {
+      console.log(item)
+    })
+    .catch(error => {
+      console.error(error)
+    })
+
+  res.send(file)
+})
+     
 
 // App Server Connection
 app.listen(process.env.PORT || 3001, () => {
