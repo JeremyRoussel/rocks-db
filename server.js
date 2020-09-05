@@ -69,19 +69,15 @@ app.get('/images/:id', (req, res) => {
 })
 
 // Multer File Route
-app.post('/upload', upload.single('image'), async (req, res, next) => {
+app.post('/upload', upload.single('image'), async (req, res) => {
   const file = req.file
   // console.log(`sampleID`, req.body.sampleID)
   if (!req.body.sampleID) {
     const error = new Error('Include the sampleID in uploads')
-    error.httpStatusCode = 400
-    return next(error)
+    error.httpStatusCode = 423
+    res.send(error)
   }
-  if (!file) {
-    const error = new Error('Please upload a file')
-    error.httpStatusCode = 400
-    return next(error)
-  }
+
   let sampleID = req.body.sampleID
   let file_loc = 'http://localhost:3001/thin-sections/' + file.originalname
   
