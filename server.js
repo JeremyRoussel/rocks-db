@@ -34,6 +34,8 @@ filename: function (req, file, cb) {
 // Multer Instance
 var upload = multer({ storage: storage })
 
+// Multer Thin Sections
+// var multerTS = upload.single('image')
 
 // Import DB Actions
 const main = require('./dbActions/main')
@@ -53,7 +55,7 @@ const corsOptions = {
     }
 }
 app.use(helmet())  // modifies headers to prevent attacks
-// app.use(cors(corsOptions))  // access control by requesting page
+app.use(cors(corsOptions))  // access control by requesting page
 app.use(bodyParser.json())
 app.use(morgan('combined')) // use 'tiny' or 'combined'
 app.use(express.static('uploads'))
@@ -69,7 +71,8 @@ app.get('/images/:id', (req, res) => {
 })
 
 // Multer File Route
-app.post('/upload', upload.single('image'), async (req, res) => {
+app.post('/uploadTS', upload.single('image'), async (req, res) => {
+  console.log(req.file)
   const file = req.file
   // console.log(`sampleID`, req.body.sampleID)
   if (!req.body.sampleID) {
